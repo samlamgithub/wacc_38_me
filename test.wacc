@@ -1,6 +1,4 @@
 begin
-  pair(int, int) p = newpair(5,6);
-  println p;
-  int[] a = [3,4];
-  println a
+  int[] a = [43, 2, 18, 1] ;
+  println len a
 end

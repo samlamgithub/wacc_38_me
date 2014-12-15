@@ -18,16 +18,6 @@ public class Stack {
 		return sp;
 	}
 	
-	public VariableData getVarFromOffset(int offset) {
-		int position = sp + offset;
-		for (VariableData v : stack) {
-			if (v.getPosition() == position) {
-				return v;
-			}
-		}
-		return null;
-	}
-	
 	public void JustIncreaseSp(int x) {
 		sp+=x;
 		System.out.println("sp :::::::::::::::::::::::::sp increase:  " + x);

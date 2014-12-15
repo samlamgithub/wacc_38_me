@@ -185,13 +185,10 @@ public class SemanticChecker extends BasicParserBaseVisitor<Type> {
 		Type identType = visit(ctx.type());
 		System.out.println("VISIT assign rhs");
 		Type rhsType = visit(ctx.assignrhs());
-		if (rhsType != null && identType != null) {
+		if (rhsType != null && identType!= null) {
 			if (rhsType instanceof ArrayType && identType instanceof ArrayType) {
-				if (((ArrayType) rhsType).getTypeOfArray() != ((ArrayType) identType)
-						.getTypeOfArray()) {
-					((ArrayType) rhsType)
-							.setTypeOfArray(((ArrayType) identType)
-									.getTypeOfArray());
+				if (((ArrayType) rhsType).getTypeOfArray() != ((ArrayType) identType).getTypeOfArray()) {
+					((ArrayType) rhsType).setTypeOfArray(((ArrayType) identType).getTypeOfArray());
 				}
 			}
 		}
@@ -867,11 +864,13 @@ public class SemanticChecker extends BasicParserBaseVisitor<Type> {
 
 	@Override
 	public Type visitPairLiteral(@NotNull BasicParser.PairLiteralContext ctx) {
+
 		return null;
 	}
 
 	@Override
 	public Type visitPlus(@NotNull BasicParser.PlusContext ctx) {
+
 		return null;
 	}
 
@@ -944,15 +943,16 @@ public class SemanticChecker extends BasicParserBaseVisitor<Type> {
 
 	@Override
 	public Type visitPairType(@NotNull BasicParser.PairTypeContext ctx) {
+
 		return new PairType(visit(ctx.pairElemType(0)),
 				visit(ctx.pairElemType(1)));
 	}
 
 	@Override
 	public Type visitArrayelement(@NotNull BasicParser.ArrayelementContext ctx) {
+
 		String variableName = ctx.IDENT().getText();
-		List<BasicParser.ExpressionContext> expList = new LinkedList<>();
-		expList.add(ctx.expression());
+		List<BasicParser.ExpressionContext> expList = ctx.expression();
 		Type expreType = null;
 		Type t = null;
 		if (table.containsName(variableName)) {
@@ -966,6 +966,7 @@ public class SemanticChecker extends BasicParserBaseVisitor<Type> {
 			exitWithError();
 			return null;
 		}
+
 		if (t instanceof StringType && expList.size() == 1) {
 			return new CharType();
 		} else if (t instanceof ArrayType) {
@@ -1104,7 +1105,7 @@ public class SemanticChecker extends BasicParserBaseVisitor<Type> {
 		System.out.println("visit read");
 		Type t = visit(ctx.assignlhs());
 		System.out.println("type: " + t);
-		if (!(t instanceof IntType) && !(t instanceof CharType)) {
+		if (!(t instanceof IntType) || (t instanceof CharType)) {
 			System.out.println("can only read int or char type variable");
 			exitWithError();
 		}
@@ -1303,6 +1304,7 @@ public class SemanticChecker extends BasicParserBaseVisitor<Type> {
 	@Override
 	public Type visitAssignRhsPairElem(
 			@NotNull BasicParser.AssignRhsPairElemContext ctx) {
+
 		return visit(ctx.pairelement());
 	}
 

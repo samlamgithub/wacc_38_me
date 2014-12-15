@@ -114,7 +114,7 @@ pairLiteral: NULL;
 
 argumentList: expression (COMMA expression)*;
 
-arrayelement: IDENT LSBRACKET expression RSBRACKET;
+arrayelement: IDENT (LSBRACKET expression RSBRACKET)+;
 
 arrayLiteral: LSBRACKET (expression (COMMA expression)*)? RSBRACKET;
 

@@ -3,11 +3,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*
- created by Artem
+/**
+ * Created by ak7613 on 03/12/14.
  */
 public class PrintManager {
-    //hi this is comment
     private List<Type> print;
     private List<Type> println;
     private int totalStrings, totalInts, totalBools, totalChars;
@@ -21,36 +20,32 @@ public class PrintManager {
     }
 
     public String getIntMsgBlock(){
-        return "int_msg:\n" +
+        return "msg_" + (((totalBools != 0) ? 2 : 0) + visitedStings++) + ":\n" +
                 "\t.word 3\n" +
-                "\t.ascii\t\"%d\\0\"\n";
+                "\t.ascii\t\"%d\\0\"";
     }
 
     public String getBoolMsgBlock(){
-        return  "bool_msg_true:\n" +
+        return  "msg_0:\n" +
                 "\t.word 5\n" +
                 "\t.ascii\t\"true\\0\"\n" +
-                "bool_msg_false:\n" +
+                "msg_1:\n" +
                 "\t.word 6\n" +
-                "\t.ascii\t\"false\\0\"\n";
+                "\t.ascii\t\"false\\0\"";
     }
 
-    public String getPrintlnMsgBlock(){
-        return "println_msg:\n" +
-                "\t.word 1\n" +
-                "\t.ascii\t\"\\0\"\n";
-    }
-
-    public String getStringMsgGeneral(){
-        return "string_msg:\n" +
+    public String getStringMsgGeneral(int index){
+        //int n = totalStrings + index + ((totalBools != 0) ? 2 : 0);
+        return "msg_1:\n" +
                 "\t.word 5\n" +
-                "\t.ascii\t\"%.*s\\0\"\n";
+                "\t.ascii\t\"%.*s\\0\"";
     }
 
-    public String getStringMsgBlock(String string, int i){
-        return "msg_" + i + ":\n" +
-               "\t.word " + (string.length() - 2) + "\n" +
-               "\t.ascii\t" + string + "\n";
+    public String getStringMsgBlock(String string){
+        return "msg_" + (((totalBools != 0) ? 2 : 0) + visitedStings++) + ":\n" +
+               ".word " + (string.length() - 2) + "\n" +
+               ".ascii\t" + string;
+
     }
 
     private void countStatements(){
@@ -67,6 +62,8 @@ public class PrintManager {
             else if(t.toString().equals("Char")) totalChars++;
         }
     }
+
+
 
     public String getAllPrintStatements(){
         String res = new String();
@@ -85,54 +82,51 @@ public class PrintManager {
         String type = t.toString();
         String s = t.toString();
         int n = totalStrings + index + ((totalBools != 0) ? 2 : 0);
+
+        switch (type) {
+            case "Int":
+                return "p_print_int:\n" +
+                        "\tPUSH {lr}\n" +
+                        "\tMOV r1, r0\n" +
+                        "\tLDR r0, =msg_" + n + "\n" +
+                        "\tADD r0, r0, #4\n" +
+                        "\tBL printf\n" +
+                        "\tMOV r0, #0\n" +
+                        "\tBL fflush\n" +
+                        "\tPOP {pc}\n";
+            case "String":
+                return "p_print_string:\n" +
+                        "\tPUSH {lr}\n" +
+                        "\tLDR r1, [r0]\n" +
+                        "\tADD r2, r0, #4\n" +
+                        "\tLDR r0, =msg_" + n + "\n" +
+                        "\tADD r0, r0, #4\n" +
+                        "\tBL printf\n" +
+                        "\tMOV r0, #0\n" +
+                        "\tBL fflush\n" +
+                        "\tPOP {pc}\n";
+            case "Bool":
+                return "p_print_bool:\n" +
+                        "\tPUSH {lr}\n" +
+                        "\tCMP r0, #0\n" +
+                        "\tLDRNE r0, =msg_0\n" +
+                        "\tLDREQ r0, =msg_" + n + "\n" +
+                        "\tADD r0, r0, #4\n" +
+                        "\tBL printf\n" +
+                        "\tMOV r0, #0\n" +
+                        "\tBL fflush\n" +
+                        "\tPOP {pc}\n";
+        }
+
         return null;
 
-    }
-
-    public String getStringPrintStatement(){
-        return "p_print_string:\n" +
-                "\tPUSH {lr}\n" +
-                "\tLDR r1, [r0]\n" +
-                "\tADD r2, r0, #4\n" +
-                "\tLDR r0, =string_msg\n" +
-                "\tADD r0, r0, #4\n" +
-                "\tBL printf\n" +
-                "\tMOV r0, #0\n" +
-                "\tBL fflush\n" +
-                "\tPOP {pc}\n";
-    }
-
-    public String getIntPrintStatement(){
-	//test
-        return "p_print_int:\n" +
-                "\tPUSH {lr}\n" +
-                "\tMOV r1, r0\n" +
-                "\tLDR r0, =int_msg\n" +
-                "\tADD r0, r0, #4\n" +
-                "\tBL printf\n" +
-                "\tMOV r0, #0\n" +
-                "\tBL fflush\n" +
-                "\tPOP {pc}\n";
-    }
-
-    public String getBoolPrintStatement(){
-        return "p_print_bool:\n" +
-                "\tPUSH {lr}\n" +
-                "\tCMP r0, #0\n" +
-                "\tLDRNE r0, =bool_msg_true\n" +
-                "\tLDREQ r0, =bool_msg_false\n" +
-                "\tADD r0, r0, #4\n" +
-                "\tBL printf\n" +
-                "\tMOV r0, #0\n" +
-                "\tBL fflush\n" +
-                "\tPOP {pc}\n";
     }
 
     public String getPrintLnStatement(){
         int n = print.size() + println.size() - totalStrings + ( (totalStrings == 0) ? 0 : 1 );
         return  "p_print_ln:\n" +
                 "\tPUSH {lr}\n" +
-                "\tLDR r0, =println_msg\n" +
+                "\tLDR r0, =msg_3\n" +
                 "\tADD r0, r0, #4\n" +
                 "\tBL puts\n" +
                 "\tMOV r0, #0\n" +
