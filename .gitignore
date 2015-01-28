@@ -30,3 +30,6 @@
 *.vrb
 *.nav
 *.toc
+
+*.wacc
+*.s

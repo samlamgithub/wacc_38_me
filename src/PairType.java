@@ -14,6 +14,22 @@ public class PairType implements Type {
 		elemtype1 = type;
 		elemtype2 = type2;
 	}
+	
+	public Type getFirstType() {
+		return elemtype1;
+	}
+	
+	public Type getSecondType() {
+		return elemtype2;
+	}
+	
+	public int getFirstTypeSpace() {
+		return getTypeSpace(elemtype1);
+	}
+	
+	public int getSecondTypeSpace() {
+		return getTypeSpace(elemtype2);
+	}
 
 	@Override
 	public boolean equals(Type othertype) {
@@ -52,6 +68,19 @@ public class PairType implements Type {
 	public int getSpace() {
 		return 4;
 	}
+	
+	public int getTypeSpace(Type type) {
+		if (type == null) {
+			return 0;
+		}
+		if (type instanceof IntType || type instanceof StringType
+				|| type instanceof ArrayType || type instanceof PairType) {
+			return 4;
+		} else {
+			return 1;
+		}
+	}
+
 
 }
 

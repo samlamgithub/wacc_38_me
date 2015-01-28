@@ -30,7 +30,7 @@ public class ArrayData {
 	}
 
 	public int getIndex() {
-		int re =  index+unitSpace;
+		int re =  index+4;
 		incrementIndex();
 		return re;
 	}

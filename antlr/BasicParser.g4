@@ -43,12 +43,14 @@ statement: SKIP #skip
        | FREE expression # free
        | EXIT expression # exit
        | PRINT expression # print
-     | RETURN expression #return
+       | RETURN expression #return
        | PRINTLN expression # println
-       | IF expression THEN statement ELSE statement FI # ifthenelse
+       | IF expression THEN statement (ELSE statement)? FI # ifthenelse
        | WHILE expression DO statement DONE # whiledo
+       | DO statement WHILE expression # dowhile
        | BEGIN statement END # statementparens
        | statement SEMICOLON statement # semicolon
+       | FOR statement SEMICOLON expression SEMICOLON statement DO statement DONE #forloop
        ;
 
 

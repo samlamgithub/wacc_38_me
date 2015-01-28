@@ -22,6 +22,8 @@ FREE: 'free';
 EXIT: 'exit';
 PRINT: 'print';
 PRINTLN: 'println';
+FOR : 'for';
+BREAK : 'break';
 IF: 'if';
 THEN: 'then';
 ELSE: 'else';

@@ -285,6 +285,13 @@ public interface BasicParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpressPositiveIntliteral(@NotNull BasicParser.ExpressPositiveIntliteralContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code forloop}
+	 * labeled alternative in {@link BasicParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForloop(@NotNull BasicParser.ForloopContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code pair}
 	 * labeled alternative in {@link BasicParser#pairElemType}.
 	 * @param ctx the parse tree
@@ -346,18 +353,18 @@ public interface BasicParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfthenelse(@NotNull BasicParser.IfthenelseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BasicParser#parameter}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParameter(@NotNull BasicParser.ParameterContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code expressStrliteral}
 	 * labeled alternative in {@link BasicParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpressStrliteral(@NotNull BasicParser.ExpressStrliteralContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BasicParser#parameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter(@NotNull BasicParser.ParameterContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BasicParser#baseType}.
 	 * @param ctx the parse tree
@@ -413,6 +420,13 @@ public interface BasicParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLess(@NotNull BasicParser.LessContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code dowhile}
+	 * labeled alternative in {@link BasicParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDowhile(@NotNull BasicParser.DowhileContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code snd}
 	 * labeled alternative in {@link BasicParser#pairelement}.

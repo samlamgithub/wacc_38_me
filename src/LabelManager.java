@@ -8,7 +8,7 @@ public class LabelManager {
 	}
 	
 	public String nextLabel() {
-		return "\nL" + (labelCount++) + ":\n";
+		return "L" + (labelCount++);
 	}
 	
 	public String newFuncLabel(String s) {

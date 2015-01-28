@@ -7,11 +7,15 @@ public class RegisterManager {
 
 	private Map<String, Type> dict; // Maps names to Types
 	private boolean[] regs;
+	private InstructionManager insMan;
+	private Stack stack;
 
-	public RegisterManager() {
+	public RegisterManager(InstructionManager insMan, Stack stack) {
 		dict = new LinkedHashMap<String, Type>();
-		regs = new boolean[16];
+		regs = new boolean[12];
 		regs[0] = regs[1] = regs[2] = true;
+		this.insMan = insMan;
+		this.stack = stack;
 	}
 
 	public void add(String name, Type type) {
@@ -53,32 +57,36 @@ public class RegisterManager {
 	}
 
 	public String nextAvailable() {
-		for (int i = 4; i < 16; i++) {
+		for (int i = 4; i < 11; i++) {
 			if (!regs[i]) {
 				setUsed(i);
 				System.out.println("use reg: r" + i);
 				return "r" + i;
 			}
 		}
-		return "no register available";
+		insMan.addInstruction("PUSH {r10}");
+		stack.push();
+        //this.setFree("r10");
+		return "r10";
 	}
 
 	public void setUsed(int reg) {
-		if (reg > 3 && reg < 16) {
+		if (reg > 3 && reg < 12) {
 			regs[reg] = true;
 		}
 	}
 
 	public void setFree(int reg) {
-		if (reg > 3 && reg < 16) {
+		if (reg > 3 && reg < 12) {
 			regs[reg] = false;
 		}
 	}
 
 	public void setFree(String r) {
+		if(r == null) return;
 		System.out.println("setfree: " + r);
 		int reg = Integer.parseInt(r.split("r")[1]);
-		if (reg > 3 && reg < 16) {
+		if (reg > 3 && reg < 12) {
 			regs[reg] = false;
 		}
 	}

@@ -108,13 +108,14 @@ public class Scope {
 	}
 	
 	public void printAllTable() {
+		System.out.println("================================ Printing scope =========================== ");
 		for (String key : table.keySet()) {
-			System.out.println("printing scope: " + key + " " + table.get(key));
+			System.out.println("============ Var:: " + key + "   :::::::: with type: " + table.get(key) + " ==========");
 		}
-		System.out.println("-----");
 		for (Scope s : childScopes) {
 			s.printAllTable();
 		}
+		System.out.println("================================ Printing Ends =========================== ");
 	}
 
 }
